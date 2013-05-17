@@ -1,0 +1,35 @@
+! Configuration File for keepalived 
+global_defs { 
+} 
+
+local_address_group laddr_g1 {
+    1.2.100.1
+    1.2.100.2
+}
+
+
+vrrp_instance VI_1 { 
+    state MASTER/BACKUP
+    interface eth1
+    virtual_router_id 82
+    priority 150
+    advert_int 1
+    authentication {
+        auth_type PASS 
+        auth_pass 1111 
+    } 
+    virtual_ipaddress {
+        1.1.1.100
+    } 
+} 
+
+
+
+virtual_server 0.0.0.0 0 { 
+    delay_loop 6
+    lb_algo rr
+    lb_kind FNAT
+    protocol TCP
+    syn_proxy
+    laddr_group_name laddr_g1
+}
