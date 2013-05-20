@@ -14,7 +14,10 @@ dsnat(Dynamic Source  Network Address Translation) 是一个基于lvs的模块,�
 
 ```
 wget ftp://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/os/SRPMS/kernel-2.6.32-220.23.1.el6.src.rpm
+```
 
+2. 准备代码
+```
 cat > ~/.rpmmacros << \'EOF\'
 %_topdir ~/rpms
 %_tmppath ~/rpms/tmp
