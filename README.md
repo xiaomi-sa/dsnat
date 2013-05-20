@@ -35,7 +35,7 @@ cat > ~/.rpmmacros << 'EOF'
 %_builddir ~/rpms/BUILD
 EOF
 
-cd;
+cd
 mkdir -p ~/rpms/{tmp,BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
 rpm -ivh kernel-2.6.32-220.23.1.el6.src.rpm
 cd ~/rpms/SPECS
@@ -54,9 +54,9 @@ patch -p1 < dsnat-2.6.32-220.23.1.el6.xiaomi.noconfig.patch
 4. 编译安装
 
 ```
-make -j16;
-make modules_install;
-make install;
+make -j16
+make modules_install
+make install
 ##重启使用新内核
 init 6
 ```
