@@ -17,7 +17,7 @@ wget ftp://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/os/SRPMS/kernel
 
 2. 准备代码
 ```
-cat > ~/.rpmmacros << \'EOF\'
+cat > ~/.rpmmacros << 'EOF'
 %_topdir ~/rpms
 %_tmppath ~/rpms/tmp
 %_sourcedir ~/rpms/SOURCES
@@ -26,7 +26,7 @@ cat > ~/.rpmmacros << \'EOF\'
 %_rpmdir ~/rpms/RPMS
 %_builddir ~/rpms/BUILD
 EOF
-
+  
 cd;
 mkdir -p ~/rpms/{tmp,BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
 rpm -ivh kernel-2.6.32-220.23.1.el6.src.rpm
@@ -90,8 +90,8 @@ rs     eth1    1.2.1.4   255.255.0.0     (rip)
 
 ```
 ##写入开机启动脚本
-
-# echo >> /etc/rc.local << \'EOF\'
+  
+# echo >> /etc/rc.local << 'EOF'
 #打开转发设置
 echo 1 > /proc/sys/net/ipv4/ip_forward
 #由于gro/lro功能会影响转发后数据包大小,超过MTU后会被丢弃重发,系统默认是开启的
@@ -101,16 +101,16 @@ ethtool -K eth0 lro off
 #绑定网卡中断,让中断在多核cpu上轮训,效果很赞,同样是gw ip所在的网卡
 set_irq_affinity.sh eth0
 EOF
-
-
+  
+  
 ##关闭irqbalance
-
+  
 # service irqbalance stop
 # chkconfig --level 2345 irqbalance off
-
-
+  
+  
 ## 绑定公网ip地址
-# echo >> /etc/rc.local << \'EOF\'
+# echo >> /etc/rc.local << 'EOF'
 ip addr add 1.2.100.1/16 dev eth1
 ip addr add 1.2.100.2/16 dev eth1
 EOF
@@ -121,17 +121,17 @@ EOF
 如果执行报错,请核对一下使用的内核补丁是否生效,ipvsadm是否为[dsnat_tools][]编译安装版本
 ```
 #打开添加一个0/0的虚拟服务,开启dsnat,让所有的内网请求都能命中该服务
-
+  
 ipvsadm –A –t 0.0.0.0:0 –s rr
-
+  
 #为vs的地址池添加公网ip
 ipvsadm –P –t 0.0.0.0:0 -z 1.2.100.1
 ipvsadm –P –t 0.0.0.0:0 -z 1.2.100.2
 ...
-
+  
 #查看vs
 ipvsadm -ln
-
+  
 #查看公网ip地址池
 ipvsadm -G
 ```
@@ -151,13 +151,13 @@ keepalive需要2台机器了,这里给出一台的配置
 global_defs {
    router_id LVS_DEVEL
 }
-
+  
 ##这是lvs的配置,写好公网ip地址池的ip
 local_address_group laddr_g1 {
         1.2.100.1
         1.2.100.2
 }
-
+  
 ##这是keepalive的配置,会根据lvs的状况,让virtual_ipaddress在合适的机器上浮动
 vrrp_sync_group G1 {
   group {
@@ -165,7 +165,7 @@ vrrp_sync_group G1 {
     VI_2
   }
 }
-
+  
 ##配置eth0浮动ip
 vrrp_instance VI_1 {
         state MASTER
@@ -177,12 +177,12 @@ vrrp_instance VI_1 {
                 auth_type pass
                 auth_pass 1111
         }
-
+  
         virtual_ipaddress {
                 1.1.100.1
         }
 }
-
+  
 #配置eth1浮动ip
 vrrp_instance VI_2 {
         state master
@@ -194,13 +194,13 @@ vrrp_instance VI_2 {
                 auth_type pass
                 auth_pass 1111
         }
-
+  
         virtual_ipaddress {
                 1.2.100.1/16
                 1.2.100.2/16
         }
 }
-
+  
 ##配置lvs,添加一个0/0的虚拟服务,开启dsnat,让所有的内网请求都能命中该服务
 virtual_server 0.0.0.0 0 {
         delay_loop 6
