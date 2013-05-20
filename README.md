@@ -99,16 +99,17 @@ rs     eth1    1.2.1.4   255.255.0.0     (rip)
 # echo >> /etc/rc.local << 'EOF'
 #打开转发设置
 echo 1 > /proc/sys/net/ipv4/ip_forward
+
 #由于gro/lro功能会影响转发后数据包大小,超过MTU后会被丢弃重发,系统默认是开启的
 #关掉gw ip所在的网卡gro/lro
 ethtool -K eth0 gro off
 ethtool -K eth0 lro off
+
 #绑定网卡中断,让中断在多核cpu上轮训,效果很赞,同样是gw ip所在的网卡
 set_irq_affinity.sh eth0
 EOF
 
 ##关闭irqbalance
-
 # service irqbalance stop
 # chkconfig --level 2345 irqbalance off
 
