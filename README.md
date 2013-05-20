@@ -168,7 +168,7 @@ local_address_group laddr_g1 {
         1.2.100.2
 }
   
-##这是keepalive的配置,会根据lvs的状况,让virtual_ipaddress在合适的机器上浮动
+##这是High Availability部分的配置,会根据lvs的状况,让virtual_ipaddress在合适的机器上浮动
 vrrp_sync_group G1 {
   group {
     VI_1
