@@ -217,7 +217,6 @@ virtual_server 0.0.0.0 0 {
         lb_algo rr
         lb_kind FNAT
         protocol TCP
-        syn_proxy
         laddr_group_name laddr_g1
 }
 ```
