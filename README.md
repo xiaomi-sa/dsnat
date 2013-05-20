@@ -27,7 +27,8 @@ cat > ~/.rpmmacros << 'EOF'
 %_srcrpmdir ~/rpms/SRPMS
 %_rpmdir ~/rpms/RPMS
 %_builddir ~/rpms/BUILD
-  
+EOF
+
 cd;
 mkdir -p ~/rpms/{tmp,BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
 rpm -ivh kernel-2.6.32-220.23.1.el6.src.rpm
@@ -36,6 +37,7 @@ rpmbuild -bp kernel.spec
 ```
 
 3. 打补丁
+
 ```
 cd ~/rpms/BUILD/
 cd kernel-2.6.32-220.23.1.el6/linux-2.6.32-220.23.1.el6.x86_64/
@@ -44,6 +46,7 @@ patch -p1 < dsnat-2.6.32-220.23.1.el6.xiaomi.noconfig.patch
 ```
 
 4. 编译安装
+
 ```
 make -j16;
 make modules_install;
@@ -67,6 +70,7 @@ make && make install
 
 ## 配置用例
 将lvs放在网关的位置,假设我们的网络环境是这样的
+
 ```
 client eth0　  1.1.1.1   255.255.0.0     (cip)
 lvs    eth0    1.1.100.1 255.255.0.0     (gw ip)
@@ -120,6 +124,7 @@ EOF
 ### 通过ipvsadm配置lvs规则
 
 如果执行报错,请核对一下使用的内核补丁是否生效,ipvsadm是否为[dsnat_tools][]编译安装版本
+
 ```
 #打开添加一个0/0的虚拟服务,开启dsnat,让所有的内网请求都能命中该服务
   
@@ -145,7 +150,6 @@ keepalive需要2台机器了,这里给出一台的配置
 - 启动：service keepalived start
 - 更新：service keepalived reload
 - 停止：service keepalived stop
-
 
 ```
 ## /etc/keepalived/keepalived.conf
