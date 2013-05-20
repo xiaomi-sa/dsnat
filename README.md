@@ -25,7 +25,7 @@ cat > ~/.rpmmacros << 'EOF'
 %_srcrpmdir ~/rpms/SRPMS
 %_rpmdir ~/rpms/RPMS
 %_builddir ~/rpms/BUILD
-EOF
+\EOF
   
 cd;
 mkdir -p ~/rpms/{tmp,BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
