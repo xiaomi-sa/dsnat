@@ -11,9 +11,9 @@ dsnat(Dynamic Source  Network Address Translation) 是一个基于lvs的模块,�
 <!--more-->
 
 1. 下载 redhat 6.2的内核
-<pre>
+```
 wget ftp://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/os/SRPMS/kernel-2.6.32-220.23.1.el6.src.rpm
-</pre>
+```
 
 ```
 cat > ~/.rpmmacros << \'EOF\'
@@ -34,44 +34,44 @@ rpmbuild -bp kernel.spec
 ```
 
 3. 打补丁
-<pre>
+```
 cd ~/rpms/BUILD/
 cd kernel-2.6.32-220.23.1.el6/linux-2.6.32-220.23.1.el6.x86_64/
 wget https://raw.github.com/xiaomi-sa/dsnat/master/dsnat-kernel-2.6.32-220.23.1.el6/dsnat-2.6.32-220.23.1.el6.xiaomi.noconfig.patch
 patch -p1 < dsnat-2.6.32-220.23.1.el6.xiaomi.noconfig.patch
-</pre>
+```
 
 4. 编译安装
-<pre>
+```
 make -j16;
 make modules_install;
 make install;
 ##重启使用新内核
 init 6
-</pre>
+```
 
 ## LVS TOOL 安装
 
 标准的ipvsadm和keepalive将无法正常使用,
 需要编译安装ipvsadm和keepalived,在[dsnat_tools][]下载工具源码
 
-<pre>
+```
 git clone git@github.com:xiaomi-sa/dsnat.git
 cd dsnat-kernel-2.6.32-220.23.1.el6/dsnat_tools/ipvsadm
 make && make install
 cd ../keepalived
 make && make install
-</pre>
+```
 
 ## 配置用例
 将lvs放在网关的位置,假设我们的网络环境是这样的
-<pre>
+```
 client eth0　  1.1.1.1   255.255.0.0     (cip)
 lvs    eth0    1.1.100.1 255.255.0.0     (gw ip)
 lvs    eth1:0  1.2.100.1 255.255.0.0     (lip)
 lvs    eth1:1  1.2.100.1 255.255.0.0     (lip)
 rs     eth1    1.2.1.4   255.255.0.0     (rip)
-</pre>
+```
 
 网络环境是(模拟一下)
 
@@ -87,7 +87,7 @@ rs     eth1    1.2.1.4   255.255.0.0     (rip)
 
 ### 网关的配置
 
-<pre>
+```
 ##写入开机启动脚本
 
 # echo >> /etc/rc.local << \'EOF\'
@@ -113,12 +113,12 @@ EOF
 ip addr add 1.2.100.1/16 dev eth1
 ip addr add 1.2.100.2/16 dev eth1
 EOF
-</pre>
+```
 
 ### 通过ipvsadm配置lvs规则
 
 如果执行报错,请核对一下使用的内核补丁是否生效,ipvsadm是否为[dsnat_tools][]编译安装版本
-<pre>
+```
 #打开添加一个0/0的虚拟服务,开启dsnat,让所有的内网请求都能命中该服务
 
 ipvsadm –A –t 0.0.0.0:0 –s rr
@@ -133,7 +133,7 @@ ipvsadm -ln
 
 #查看公网ip地址池
 ipvsadm -G
-</pre>
+```
 
 
 ### 通过keepalive配置lvs规则
@@ -145,7 +145,7 @@ keepalive需要2台机器了,这里给出一台的配置
 - 停止：service keepalived stop
 
 
-<pre>
+```
 ## /etc/keepalived/keepalived.conf
 global_defs {
    router_id LVS_DEVEL
@@ -209,7 +209,7 @@ virtual_server 0.0.0.0 0 {
         syn_proxy
         laddr_group_name laddr_g1
 }
-</pre>
+```
 
 
 ## 资源
