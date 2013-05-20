@@ -18,7 +18,7 @@ wget ftp://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/os/SRPMS/kernel
 2. 提取源码
 
 <pre>
-cat > ~/.rpmmacros << 'EOF'
+cat > ~/.rpmmacros << \'EOF\'
 %_topdir ~/rpms
 %_tmppath ~/rpms/tmp
 %_sourcedir ~/rpms/SOURCES
@@ -88,10 +88,11 @@ rs     eth1    1.2.1.4   255.255.0.0     (rip)
 
 
 ### 网关的配置
+
 <pre>
 ##写入开机启动脚本
 
-# echo >> /etc/rc.local << 'EOF'
+# echo >> /etc/rc.local << \'EOF\'
 #打开转发设置
 echo 1 > /proc/sys/net/ipv4/ip_forward
 #由于gro/lro功能会影响转发后数据包大小,超过MTU后会被丢弃重发,系统默认是开启的
@@ -110,11 +111,10 @@ EOF
 
 
 ## 绑定公网ip地址
-# echo >> /etc/rc.local << 'EOF'
+# echo >> /etc/rc.local << \'EOF\'
 ip addr add 1.2.100.1/16 dev eth1
 ip addr add 1.2.100.2/16 dev eth1
 EOF
-
 </pre>
 
 ### 通过ipvsadm配置lvs规则
