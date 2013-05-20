@@ -95,7 +95,7 @@ rs     eth1    1.2.1.4   255.255.0.0     (rip)
 
 ```
 ##写入开机启动脚本
-  
+
 # echo >> /etc/rc.local << 'EOF'
 #打开转发设置
 echo 1 > /proc/sys/net/ipv4/ip_forward
@@ -106,14 +106,12 @@ ethtool -K eth0 lro off
 #绑定网卡中断,让中断在多核cpu上轮训,效果很赞,同样是gw ip所在的网卡
 set_irq_affinity.sh eth0
 EOF
-  
-  
+
 ##关闭irqbalance
-  
+
 # service irqbalance stop
 # chkconfig --level 2345 irqbalance off
-  
-  
+
 ## 绑定公网ip地址
 # echo >> /etc/rc.local << 'EOF'
 ip addr add 1.2.100.1/16 dev eth1
@@ -127,9 +125,9 @@ EOF
 
 ```
 #打开添加一个0/0的虚拟服务,开启dsnat,让所有的内网请求都能命中该服务
-  
+
 ipvsadm –A –t 0.0.0.0:0 –s rr
-  
+
 #为vs的地址池添加公网ip
 ipvsadm –P –t 0.0.0.0:0 -z 1.2.100.1
 ipvsadm –P –t 0.0.0.0:0 -z 1.2.100.2
@@ -170,7 +168,7 @@ vrrp_sync_group G1 {
     VI_2
   }
 }
-  
+
 ##配置eth0浮动ip
 vrrp_instance VI_1 {
         state MASTER
@@ -187,7 +185,7 @@ vrrp_instance VI_1 {
                 1.1.100.1
         }
 }
-  
+
 #配置eth1浮动ip
 vrrp_instance VI_2 {
         state master
@@ -199,13 +197,13 @@ vrrp_instance VI_2 {
                 auth_type pass
                 auth_pass 1111
         }
-  
+
         virtual_ipaddress {
                 1.2.100.1/16
                 1.2.100.2/16
         }
 }
-  
+
 ##配置lvs,添加一个0/0的虚拟服务,开启dsnat,让所有的内网请求都能命中该服务
 virtual_server 0.0.0.0 0 {
         delay_loop 6
