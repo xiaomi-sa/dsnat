@@ -18,17 +18,8 @@ wget ftp://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/os/SRPMS/kernel
 2. 提取源码
 
 <pre>
-'
->
-<
-"
-\'
-\>
-\<
-\"
-&gt;
-&lt;
-cat > ~/.rpmmacros \<\< \'EOF\'
+
+cat > ~/.rpmmacros &lt;&lt; \'EOF\'
 %_topdir ~/rpms
 %_tmppath ~/rpms/tmp
 %_sourcedir ~/rpms/SOURCES
