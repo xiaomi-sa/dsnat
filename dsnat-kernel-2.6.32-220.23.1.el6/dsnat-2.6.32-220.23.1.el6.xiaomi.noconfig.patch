@@ -17221,7 +17221,7 @@ diff -uprN linux-2.6.32-220.23.1.el6.x86_64.bak/net/netfilter/ipvs/ip_vs_xmit.c 
  }
 diff -uprN linux-2.6.32-220.23.1.el6.x86_64.bak/net/netfilter/ipvs/Kconfig linux-2.6.32-220.23.1.el6.x86_64/net/netfilter/ipvs/Kconfig
 --- linux-2.6.32-220.23.1.el6.x86_64.bak/net/netfilter/ipvs/Kconfig	2012-10-31 19:49:06.122132895 +0800
-+++ linux-2.6.32-220.23.1.el6.x86_64/net/netfilter/ipvs/Kconfig	2013-04-11 16:06:03.000000000 +0800
++++ linux-2.6.32-220.23.1.el6.x86_64/net/netfilter/ipvs/Kconfig	2013-05-25 15:13:27.000000000 +0800
 @@ -43,8 +43,8 @@ config	IP_VS_DEBUG
  
  config	IP_VS_TAB_BITS
@@ -17233,30 +17233,10 @@ diff -uprN linux-2.6.32-220.23.1.el6.x86_64.bak/net/netfilter/ipvs/Kconfig linux
  	---help---
  	  The IPVS connection hash table uses the chaining scheme to handle
  	  hash collisions. Using a big IPVS connection hash table will greatly
-@@ -82,6 +82,13 @@ config	IP_VS_PROTO_UDP
- 	  This option enables support for load balancing UDP transport
- 	  protocol. Say Y if unsure.
- 
-+config	IP_VS_PROTO_ICMP
-+	bool "ICMP load balancing support for dsnat"
-+	---help---
-+	  This option enables support for dsnat load balancing UDP transport
-+	  protocol. Say Y if unsure.
-+
-+config	IP_VS_PROTO_AH_ESP
- config	IP_VS_PROTO_AH_ESP
- 	bool
- 	depends on UNDEFINED
 diff -uprN linux-2.6.32-220.23.1.el6.x86_64.bak/net/netfilter/ipvs/Makefile linux-2.6.32-220.23.1.el6.x86_64/net/netfilter/ipvs/Makefile
 --- linux-2.6.32-220.23.1.el6.x86_64.bak/net/netfilter/ipvs/Makefile	2012-10-31 19:49:01.156805439 +0800
-+++ linux-2.6.32-220.23.1.el6.x86_64/net/netfilter/ipvs/Makefile	2013-04-11 15:49:26.000000000 +0800
-@@ -6,11 +6,13 @@
- ip_vs_proto-objs-y :=
- ip_vs_proto-objs-$(CONFIG_IP_VS_PROTO_TCP) += ip_vs_proto_tcp.o
- ip_vs_proto-objs-$(CONFIG_IP_VS_PROTO_UDP) += ip_vs_proto_udp.o
-+ip_vs_proto-objs-$(CONFIG_IP_VS_PROTO_ICMP) += ip_vs_proto_icmp.o
- ip_vs_proto-objs-$(CONFIG_IP_VS_PROTO_AH_ESP) += ip_vs_proto_ah_esp.o
- 
++++ linux-2.6.32-220.23.1.el6.x86_64/net/netfilter/ipvs/Makefile	2013-05-25 15:13:31.000000000 +0800
+@@ -11,6 +11,7 @@ ip_vs_proto-objs-$(CONFIG_IP_VS_PROTO_AH
  ip_vs-objs :=	ip_vs_conn.o ip_vs_core.o ip_vs_ctl.o ip_vs_sched.o	   \
  		ip_vs_xmit.o ip_vs_app.o ip_vs_sync.o	   		   \
  		ip_vs_est.o ip_vs_proto.o 				   \
