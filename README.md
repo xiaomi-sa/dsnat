@@ -47,8 +47,8 @@ rpmbuild -bp kernel.spec
 ```
 cd ~/rpms/BUILD/
 cd kernel-2.6.32-220.23.1.el6/linux-2.6.32-220.23.1.el6.x86_64/
-wget https://raw.github.com/xiaomi-sa/dsnat/master/dsnat-kernel-2.6.32-220.23.1.el6/dsnat-2.6.32-220.23.1.el6.xiaomi.noconfig.patch
-patch -p1 < dsnat-2.6.32-220.23.1.el6.xiaomi.noconfig.patch
+wget https://raw.github.com/xiaomi-sa/dsnat/master/dsnat-kernel-2.6.32-279.23.1.el6/dsnat-2.6.32-279.23.1.el6.xiaomi.noconfig.patch
+patch -p1 < dsnat-2.6.32-279.23.1.el6.xiaomi.noconfig.patch
 ```
 
 4. 编译安装
@@ -126,26 +126,46 @@ ip addr add 1.2.100.2/16 dev eth1
 EOF
 ```
 
+### zone 说明
+
+
+
 ### 通过ipvsadm配置lvs规则
 
 如果执行报错,请核对一下使用的内核补丁是否生效,ipvsadm是否为[dsnat_tools][]编译安装版本
 
 ```
 #打开添加一个0/0的虚拟服务,开启dsnat,让所有的内网请求都能命中该服务
-
 ipvsadm –A –t 0.0.0.0:0 –s rr
 
-#为vs的地址池添加公网ip
-ipvsadm –P –t 0.0.0.0:0 -z 1.2.100.1
-ipvsadm –P –t 0.0.0.0:0 -z 1.2.100.2
+
+#添加一个1.1.0.0/16的网段,用来做源地址匹配(client的ip是1.1.1.1/16)
+ipvsadm -K  --zone 1.1.0.0/16
+
+#为1.0.0.0/16的zone添加local address
+ipvsadm -P --zone 1.1.0.0/16 -z 1.2.100.1
+ipvsadm -P --zone 1.1.0.0/16 -z 1.2.100.2
+
+#再添加一个缺省的网段0/0
+ipvsadm -K  --zone 0.0.0.0/0
+
+#为缺省网段添加local address
+ipvsadm -P --zone 0.0.0.0/0 -z 1.2.100.3
 ...
-  
+
+#源地址会从第一个网段开始,依次检查到最后一个,一旦找到相匹配的网段即终止检查
+#网段内如果没有local address
+#或者local address中的ip上的所有端口都被占用
+#或者没有匹配到任何网段
+#lvs将不会做任何处理(可视为丢弃)
+
 #查看vs
 ipvsadm -ln
   
 #查看公网ip地址池
 ipvsadm -G
 ```
+
 
 
 ### 通过keepalive配置lvs规则

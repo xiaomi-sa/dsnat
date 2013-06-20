@@ -1,0 +1,5 @@
+*.o
+*.a
+ipvsadm/ipvsadm
+log
+config.*
