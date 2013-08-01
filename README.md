@@ -12,14 +12,38 @@ dsnat_tools包含ipvsadm和keepalived这2个工具,在官方源码的基础上�
 
 ## 安装
 
+##### 安装二进制包(xiaomi内网可访问)
+
+1. 内核
+
+```
+rpm -ivh http://xiaomi-kernel.xae.xiaomi.com/mi4-dsnat/kernel-firmware-2.6.32-279.23.1.mi4.el6.x86_64.rpm
+rpm -ivh http://xiaomi-kernel.xae.xiaomi.com/mi4-dsnat/kernel-2.6.32-279.23.1.mi4.el6.x86_64.rpm
+#开发包
+rpm -ivh http://xiaomi-kernel.xae.xiaomi.com/mi4-dsnat/kernel-devel-2.6.32-279.23.1.mi4.el6.x86_64.rpm
+rpm -ivh http://xiaomi-kernel.xae.xiaomi.com/mi4-dsnat/kernel-headers-2.6.32-279.23.1.mi4.el6.x86_64.rpm 
+```
+
+2. ipvsadm/keepalive
+
+```
+#如发现/usr/local目录下的ipvsadm/keepalived,删掉
+wget http://xiaomi-kernel.xae.xiaomi.com/mi4-dsnat/tools/ipvsadm -O /sbin/ipvsadm
+wget http://xiaomi-kernel.xae.xiaomi.com/mi4-dsnat/tools/keepalived -O /sbin/keepalived
+
+```
+
+
+##### 源码安装
+
 过程可以参考[FNAT][],将补丁换成[dsnat][]即可
 
 <!--more-->
 
-1. 下载 redhat 6.2的内核
+1. 下载 redhat 6.3的内核
 
 ```
-wget ftp://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/os/SRPMS/kernel-2.6.32-220.23.1.el6.src.rpm
+wget ftp://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/os/SRPMS/kernel-2.6.32-279.23.1.el6.src.rpm
 ```
 
 2. 准备代码
@@ -37,7 +61,7 @@ EOF
 
 cd
 mkdir -p ~/rpms/{tmp,BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
-rpm -ivh kernel-2.6.32-220.23.1.el6.src.rpm
+rpm -ivh kernel-2.6.32-279.23.1.el6.src.rpm
 cd ~/rpms/SPECS
 rpmbuild -bp kernel.spec
 ```
@@ -46,7 +70,7 @@ rpmbuild -bp kernel.spec
 
 ```
 cd ~/rpms/BUILD/
-cd kernel-2.6.32-220.23.1.el6/linux-2.6.32-220.23.1.el6.x86_64/
+cd kernel-2.6.32-220.23.1.el6/linux-2.6.32-279.23.1.el6.x86_64/
 wget https://raw.github.com/xiaomi-sa/dsnat/master/dsnat-kernel-2.6.32-279.23.1.el6/dsnat-2.6.32-279.23.1.el6.xiaomi.noconfig.patch
 patch -p1 < dsnat-2.6.32-279.23.1.el6.xiaomi.noconfig.patch
 ```
@@ -68,7 +92,7 @@ init 6
 
 ```
 git clone git@github.com:xiaomi-sa/dsnat.git
-cd dsnat-kernel-2.6.32-220.23.1.el6/dsnat_tools/ipvsadm
+cd dsnat/dsnat_tools/ipvsadm
 make && make install
 cd ../keepalived
 make && make install
@@ -78,11 +102,10 @@ make && make install
 将lvs放在网关的位置,假设网络环境是这样的
 
 ```
-client eth0　  1.1.1.1   255.255.0.0     (cip)
-lvs    eth0    1.1.100.1 255.255.0.0     (gw ip)
-lvs    eth1:0  1.2.100.1 255.255.0.0     (lip)
-lvs    eth1:1  1.2.100.1 255.255.0.0     (lip)
-rs     eth1    1.2.1.4   255.255.0.0     (rip)
+client eth0　  1.1.1.1      255.255.0.0     (cip)
+lvs    eth0    1.1.100.1    255.255.0.0     (gw ip)
+lvs    eth1    1.2.100.1-4  255.255.0.0     (lip)
+rs     eth1    1.2.1.4      255.255.0.0     (rip)
 ```
 
 网络环境是(模拟一下)
@@ -119,10 +142,12 @@ EOF
 # service irqbalance stop
 # chkconfig --level 2345 irqbalance off
 
-## 绑定公网ip地址
+## 绑定local address
 # echo >> /etc/rc.local << 'EOF'
 ip addr add 1.2.100.1/16 dev eth1
 ip addr add 1.2.100.2/16 dev eth1
+ip addr add 1.2.100.3/16 dev eth1
+ip addr add 1.2.100.4/16 dev eth1
 EOF
 ```
 
@@ -158,11 +183,7 @@ ipvsadm -K  --zone 0.0.0.0/0
 ipvsadm -P --zone 0.0.0.0/0 -z 1.2.100.3
 ...
 
-#源地址会从第一个网段开始,依次检查到最后一个,一旦找到相匹配的网段即终止检查
-#网段内如果没有local address
-#或者local address中的ip上的所有端口都被占用
-#或者没有匹配到任何网段
-#lvs将不会做任何处理(可视为丢弃)
+
 
 #查看vs
 ipvsadm -ln
@@ -268,5 +289,5 @@ virtual_server 0.0.0.0 0 {
 
 [FNAT]:http://kb.linuxvirtualserver.org/wiki/IPVS_FULLNAT_and_SYNPROXY
 [dsnat_img]:https://raw.github.com/xiaomi-sa/dsnat/master/dsnat-kernel-2.6.32-220.23.1.el6/dsnat.jpg
-[dsnat]:https://github.com/xiaomi-sa/dsnat/tree/master/dsnat-kernel-2.6.32-220.23.1.el6/dsnat-2.6.32-220.23.1.el6.xiaomi.noconfig.patch
-[dsnat_tools]:https://github.com/xiaomi-sa/dsnat/tree/master/dsnat-kernel-2.6.32-220.23.1.el6/dsnat_tools
+[dsnat]:https://github.com/xiaomi-sa/dsnat/tree/master/dsnat-kernel-2.6.32-279.23.1.el6/dsnat-2.6.32-279.23.1.el6.xiaomi.noconfig.patch
+[dsnat_tools]:https://github.com/xiaomi-sa/dsnat/tree/master/dsnat_tools
