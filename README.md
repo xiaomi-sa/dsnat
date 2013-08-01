@@ -128,6 +128,11 @@ EOF
 
 ### zone 说明
 
+ - zone表示一个网段,可以用192.168.1.0/24或192.168.1.0/255.255.255.0表示
+ - local address绑定在zone上
+ - dsnat对连接源地址判断，顺序匹配zone，以第一个匹配到的zone/local address作为snat的源地址池
+ - 如果没有匹配到zone或者匹配到的zone没有绑定local address，连接会被丢弃（可用作黑名单）
+
 
 
 ### 通过ipvsadm配置lvs规则
