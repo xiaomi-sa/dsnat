@@ -8,7 +8,11 @@ dsnat_tools包含ipvsadm和keepalived这2个工具,在官方源码的基础上�
 - ipvsadm是对lvs进行配置的用户空间工具,ipvsadm->lvs类似于iptables->netfilter
 - keepalived是对lvs集群的一个自动化配置工具(以服务形式常驻内存),可针对rs自动摘除和添加rs到vs中;并带有HA功能,提供热备容灾
 
+## change log
 
+ - 添加了源地址判断功能
+   * 不同源地址可使用不同的local address
+   * 可实现源地址黑白名单功能
 
 ## 安装
 
