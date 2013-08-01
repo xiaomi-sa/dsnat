@@ -13,6 +13,7 @@ dsnat_tools包含ipvsadm和keepalived这2个工具,在官方源码的基础上�
  - 添加了源地址判断功能
    * 不同源地址可使用不同的local address
    * 可实现源地址黑白名单功能
+ - 代码由原来的centos6.2内核改为centos6.3内核
 
 ## 安装
 
@@ -74,7 +75,7 @@ rpmbuild -bp kernel.spec
 
 ```
 cd ~/rpms/BUILD/
-cd kernel-2.6.32-220.23.1.el6/linux-2.6.32-279.23.1.el6.x86_64/
+cd kernel-2.6.32-279.23.1.el6/linux-2.6.32-279.23.1.el6.x86_64/
 wget https://raw.github.com/xiaomi-sa/dsnat/master/dsnat-kernel-2.6.32-279.23.1.el6/dsnat-2.6.32-279.23.1.el6.xiaomi.noconfig.patch
 patch -p1 < dsnat-2.6.32-279.23.1.el6.xiaomi.noconfig.patch
 ```
