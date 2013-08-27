@@ -5,6 +5,7 @@ Summary: tools for manage lvs, include keepalived, ipvsadm and quagga
 Group: Taobao/Common
 URL: %{_svn_path} 
 %define _prefix /usr
+%define _unpackaged_files_terminate_build 0
 #Source:        %{name}-%{version}.tar.gz
 License:       GPL
 BuildRequires: kernel, kernel-devel, kernel-headers
