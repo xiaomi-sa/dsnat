@@ -1,8 +1,8 @@
 Name:    lvs-tools
-Version: 1.0.0 
+Version: 1.0.1 
 Release: %(echo $RELEASE)%{?dist}
 Summary: tools for manage lvs, include keepalived, ipvsadm and quagga
-Group: Taobao/Common
+Group: Xiaomi/Common
 URL: %{_svn_path} 
 %define _prefix /usr
 %define _unpackaged_files_terminate_build 0
@@ -135,5 +135,7 @@ exit 0
 #%config(noreplace) %attr(640,root,root) /etc/logrotate.d/*
 
 %changelog
+* Thu Jun 20 2013 yubo <yubo@xiaomi.com> 1.0.1
+- add zone for dsnat
 * Thu Feb 16 2012 Pukong.wjm <pukong.wjm@taobao.com> 1.0.0
 - first create package
