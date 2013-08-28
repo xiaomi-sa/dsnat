@@ -32,7 +32,6 @@ vrrp_sync_group G1 {
         VI_1
    }
 }
-
 vrrp_instance VI_1 { 
     state MASTER/BACKUP   #备机改为 BACKUP,此状态是由 priority 的值来决定的 
     interface eth1  #HA 监测网络接口 
@@ -48,17 +47,20 @@ vrrp_instance VI_1 {
     } 
 } 
 
-virtual_server 0.0.0.0 0 {
-    delay_loop 6
-    lb_algo rr
-    lb_kind FNAT
-    protocol TCP
+virtual_server 1.1.1.100 80 { 
+    delay_loop 6 #每隔 6 秒查询 realserver状态 
+    lb_algo rr #lvs 调度算法,这里使用轮叫 
+    lb_kind FNAT #lvs 负载均衡机制,这里使用直连路由 
+#    persistence_timeout 50 #同一 IP 的连接 50 秒内被分配到同一台 realserver 
+    protocol TCP #用 TCP 协议检查 realserver 状态 
+　　syn_proxy
+    real_server 1.2.1.5 80 { 
+        weight 1 
+        inhibit_on_failure
+        TCP_CHECK { 
+            connect_timeout 3 
+            nb_get_retry 3 
+            delay_before_retry 3 
+        } 
+    } 
 }
-
-virtual_server 0.0.0.0 0 {
-    delay_loop 6
-    lb_algo rr
-    lb_kind FNAT
-    protocol UDP
-}
-
