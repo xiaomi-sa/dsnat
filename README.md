@@ -22,11 +22,11 @@ dsnat_tools包含ipvsadm和keepalived这2个工具,在官方源码的基础上�
 1. 内核
 
 ```
-rpm -ivh http://xiaomi-kernel.xae.xiaomi.com/mi4-dsnat/kernel-firmware-2.6.32-279.23.1.mi4.el6.x86_64.rpm
-rpm -ivh http://xiaomi-kernel.xae.xiaomi.com/mi4-dsnat/kernel-2.6.32-279.23.1.mi4.el6.x86_64.rpm
+rpm -ivh http://xiaomi-kernel.xae.xiaomi.com/mi4-dsnat/kernel-firmware-2.6.32-279.mi4.el6.x86_64.rpm
+rpm -ivh http://xiaomi-kernel.xae.xiaomi.com/mi4-dsnat/kernel-2.6.32-279.mi4.el6.x86_64.rpm
 #开发包
-rpm -ivh http://xiaomi-kernel.xae.xiaomi.com/mi4-dsnat/kernel-devel-2.6.32-279.23.1.mi4.el6.x86_64.rpm
-rpm -ivh http://xiaomi-kernel.xae.xiaomi.com/mi4-dsnat/kernel-headers-2.6.32-279.23.1.mi4.el6.x86_64.rpm 
+rpm -ivh http://xiaomi-kernel.xae.xiaomi.com/mi4-dsnat/kernel-devel-2.6.32-279.mi4.el6.x86_64.rpm
+rpm -ivh http://xiaomi-kernel.xae.xiaomi.com/mi4-dsnat/kernel-headers-2.6.32-279.mi4.el6.x86_64.rpm 
 ```
 
 2. ipvsadm/keepalive
@@ -48,7 +48,7 @@ wget http://xiaomi-kernel.xae.xiaomi.com/mi4-dsnat/tools/keepalived -O /sbin/kee
 1. 下载 redhat 6.3的内核
 
 ```
-wget ftp://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/os/SRPMS/kernel-2.6.32-279.23.1.el6.src.rpm
+wget ftp://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/os/SRPMS/kernel-2.6.32-279.el6.src.rpm
 ```
 
 2. 准备代码
