@@ -8,7 +8,7 @@ CC	 = gcc
 INCLUDES = -I.
 CFLAGS	 = -g -O2 $(INCLUDES) \
 	   -Wall -Wunused -Wstrict-prototypes
-DEFS	 = -D_DEBUG_
+DEFS	 = 
 COMPILE	 = $(CC) $(CFLAGS) $(DEFS)
 
 OBJS = 	memory.o utils.o notify.o timer.o scheduler.o \

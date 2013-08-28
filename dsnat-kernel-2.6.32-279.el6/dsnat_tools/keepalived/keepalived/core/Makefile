@@ -6,9 +6,9 @@
 
 CC	 = gcc
 INCLUDES = -I../include -I../../lib
-CFLAGS	 = -g -O2  -I/root/git.n.xiaomi.com/linux/include $(INCLUDES) \
+CFLAGS	 = -g -O2  -I/lib/modules/2.6.32/build/include $(INCLUDES) \
 	   -Wall -Wunused -Wstrict-prototypes
-DEFS	 = -D_KRNL_2_6_ -D_WITH_LVS_ -D_WITH_VRRP_ -D_DEBUG_
+DEFS	 = -D_KRNL_2_6_ -D_WITH_LVS_ -D_WITH_VRRP_ 
 COMPILE	 = $(CC) $(CFLAGS) $(DEFS)
 
 OBJS = 	main.o daemon.o pidfile.o layer4.o smtp.o \

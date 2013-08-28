@@ -5,15 +5,15 @@
 EXEC = genhash
 BIN  = ../bin
 
-prefix      = /
+prefix      = /usr/local
 exec_prefix = ${prefix}
 bindir      = ${exec_prefix}/bin
-mandir      = /usr/local/share/man
+mandir      = ${prefix}/share/man
 
 CC = gcc
 STRIP = strip
 INCLUDES = -I../lib
-CFLAGS = -g -O2  -I/root/git.n.xiaomi.com/linux/include $(INCLUDES) \
+CFLAGS = -g -O2  -I/lib/modules/2.6.32/build/include $(INCLUDES) \
 	 -Wall -Wunused -Wstrict-prototypes
 LDFLAGS = -lpopt -lssl -lcrypto  
 

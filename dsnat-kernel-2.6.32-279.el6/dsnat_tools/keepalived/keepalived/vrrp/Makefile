@@ -6,9 +6,9 @@
 
 CC	 = gcc
 INCLUDES = -I../include -I../../lib
-CFLAGS	 = -g -O2  -I/root/git.n.xiaomi.com/linux/include $(INCLUDES) \
+CFLAGS	 = -g -O2  -I/lib/modules/2.6.32/build/include $(INCLUDES) \
 	   -Wall -Wunused -Wstrict-prototypes
-DEFS	 = -D_KRNL_2_6_ -D_WITH_LVS_ -D_HAVE_IPVS_SYNCD_ -D_DEBUG_
+DEFS	 = -D_KRNL_2_6_ -D_WITH_LVS_ -D_HAVE_IPVS_SYNCD_ 
 COMPILE	 = $(CC) $(CFLAGS) $(DEFS)
 
 OBJS = 	vrrp_daemon.o vrrp_data.o vrrp_parser.o \

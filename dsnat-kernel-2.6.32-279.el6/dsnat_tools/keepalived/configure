@@ -3880,8 +3880,11 @@ fi
 $as_echo "$ac_cv_lib_nl_nl_handle_alloc" >&6; }
 if test "x$ac_cv_lib_nl_nl_handle_alloc" = x""yes; then :
 
-    USE_NL="LIBIPVS_USE_NL"
-    LIBS="$LIBS -lnl"
+#    USE_NL="LIBIPVS_USE_NL"
+#    LIBS="$LIBS -lnl"
+    USE_NL="LIBIPVS_DONTUSE_NL"
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: keepalived will be built without libnl support." >&5
+$as_echo "$as_me: WARNING: keepalived will be built without libnl support." >&2;}
 
 else
 

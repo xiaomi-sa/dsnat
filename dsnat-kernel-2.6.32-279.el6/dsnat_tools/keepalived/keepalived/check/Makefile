@@ -7,9 +7,9 @@
 KERNEL   = _KRNL_2_6_
 CC	 = gcc
 INCLUDES = -I../include -I../../lib
-CFLAGS	 = -g -O2  -I/root/git.n.xiaomi.com/linux/include $(INCLUDES) \
+CFLAGS	 = -g -O2  -I/lib/modules/2.6.32/build/include $(INCLUDES) \
 	   -Wall -Wunused -Wstrict-prototypes
-DEFS	 = -D$(KERNEL) -D_WITH_LVS_ -D_HAVE_IPVS_SYNCD_ -D_WITH_VRRP_ -D_DEBUG_
+DEFS	 = -D$(KERNEL) -D_WITH_LVS_ -D_HAVE_IPVS_SYNCD_ -D_WITH_VRRP_ 
 COMPILE	 = $(CC) $(CFLAGS) $(DEFS)
 
 OBJS = 	check_daemon.o check_data.o check_parser.o \

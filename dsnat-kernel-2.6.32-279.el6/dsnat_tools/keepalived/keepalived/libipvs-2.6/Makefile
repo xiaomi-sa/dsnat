@@ -1,7 +1,7 @@
 # Makefile for libipvs
 
 CC		= gcc
-CFLAGS		= -g -O2  -I/root/git.n.xiaomi.com/linux/include -DLIBIPVS_DONTUSE_NL -Wall -Wunused
+CFLAGS		= -g -O2  -I/lib/modules/2.6.32/build/include -DLIBIPVS_DONTUSE_NL -Wall -Wunused
 
 export OBJS += libipvs.a
 

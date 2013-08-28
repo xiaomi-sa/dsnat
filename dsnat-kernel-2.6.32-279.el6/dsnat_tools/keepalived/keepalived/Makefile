@@ -10,11 +10,11 @@ KERNEL    = _KRNL_2_6_
 IPVS_FLAG = _WITH_LVS_
 VRRP_FLAG = _WITH_VRRP_
 
-prefix      = /
+prefix      = /usr/local
 exec_prefix = ${prefix}
 sbindir     = ${exec_prefix}/sbin
 sysconfdir  = ${prefix}/etc
-mandir      = /usr/local/share/man
+mandir      = ${prefix}/share/man
 init_dir    = $(sysconfdir)/rc.d/init.d
 conf_dir    = $(sysconfdir)/keepalived
 sysconf_dir = $(sysconfdir)/sysconfig
@@ -45,7 +45,7 @@ all:
 	for i in $(SUBDIRS); do \
 	$(MAKE) -C $$i || exit 1; done && \
 	echo "Building $(BIN)/$(EXEC)" && \
-	$(CC) -g -o $(BIN)/$(EXEC) `find $(SUBDIRS) ../lib -name '*.[oa]'` $(LDFLAGS)
+	$(CC) -o $(BIN)/$(EXEC) `find $(SUBDIRS) ../lib -name '*.[oa]'` $(LDFLAGS)
 	$(STRIP) $(BIN)/$(EXEC)
 	@echo ""
 	@echo "Make complete"
